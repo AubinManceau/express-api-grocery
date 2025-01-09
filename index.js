@@ -1,5 +1,5 @@
-import http from 'http';
-import { app } from './src/app.js';
+import http from "http";
+import app from './src/app.js';
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -12,7 +12,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || "3000");
 app.set('port', port);
 
 const errorHandler = error => {

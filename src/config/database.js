@@ -3,7 +3,7 @@ import { Sequelize } from 'sequelize';
 
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PASSWORD, {
+const db = new Sequelize(process.env.DB, process.env.USER, process.env.PASSWORD, {
     server: process.env.HOST,
     port: process.env.SQL_PORT || 1433,
     dialect: 'mssql',
@@ -16,4 +16,4 @@ const sequelize = new Sequelize(process.env.DB, process.env.USER, process.env.PA
     logging: false,
 });
 
-export { sequelize };
+export default db;
