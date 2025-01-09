@@ -52,7 +52,7 @@ const login = async (req, res) => {
     { expiresIn: "24h" },
   );
   res.header("Authorization", "Bearer " + token)
-  return res.status(200).json(token);
+  return res.status(200).json({"token" : token});
 }
 
 const getUsers = async (req, res) => {
