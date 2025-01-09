@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
+import e from 'express';
 
 const signup = async (req, res) => {
   const { email, password, first_name, last_name } = req.body;
@@ -64,4 +65,52 @@ const getUsers = async (req, res) => {
   }
 }
 
-export default { signup, login, getUsers };
+const getUserById = async (req, res) => {
+  const id = req.params.id;
+  try{
+    const user = await User.findByPk(id);
+    if(!user){
+      res.status(404).json({ error: 'User not found' });
+    }else{
+      res.status(200).json({ user: user });
+    }
+  }catch (error) {
+    res.status(400).json({ error: 'Error when recovering user' });
+  }
+}
+
+const getUsersByRole = async (req, res) => {
+  
+}
+
+const updateUser = async (req, res) => {
+  const id = req.params.id;
+  try{
+    const user = await User.findByPk(id);
+    if(!user){
+      res.status(404).json({ error: 'User not found' });
+    }else{
+      await user.update(req.body);
+      res.status(200).json({ message: 'User updated', user: user });
+    }
+  }catch{
+    res.status(400).json({ error: 'Error when updating user' });
+  }
+}
+
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try{
+    const user = await User.findByPk(id);
+    if(!user){
+      res.status(404).json({ error: 'User not found' });
+    }else{
+      await user.destroy();
+      res.status(200).json({ message: 'User deleted' });
+    }
+  }catch{
+    res.status(400).json({ error: 'Error when deleting user' });
+  }
+}
+
+export default { signup, login, getUsers, getUserById, getUsersByRole, updateUser, deleteUser };
