@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import bcrypt from 'bcrypt';
-import e from 'express';
 
 const signup = async (req, res) => {
   const { email, password, first_name, last_name } = req.body;
@@ -39,6 +38,10 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Incorrect login/password pair' });
   }
 
+  if(user.deletedAt){
+    return res.status(401).json({ message: 'Incorrect login/password pair' });
+  }
+
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
       return res.status(401).json({ message: 'Incorrect login/password pair' });
@@ -58,7 +61,7 @@ const login = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try{
-    const users = await User.findAll();
+    const users = await User.findAll({ where: { deletedAt: null } });
     res.status(200).json({ users: users });
   }catch (error) {
     res.status(400).json({ error: 'Error when recovering users' });
@@ -70,6 +73,8 @@ const getUserById = async (req, res) => {
   try{
     const user = await User.findByPk(id);
     if(!user){
+      res.status(404).json({ error: 'User not found' });
+    }else if(user.deletedAt){
       res.status(404).json({ error: 'User not found' });
     }else{
       res.status(200).json({ user: user });
@@ -89,8 +94,11 @@ const updateUser = async (req, res) => {
     const user = await User.findByPk(id);
     if(!user){
       res.status(404).json({ error: 'User not found' });
+    }else if(user.deletedAt){
+      res.status(404).json({ error: 'User not found' });
     }else{
-      await user.update(req.body);
+      const { deletedAt, ...updateData } = req.body;
+      await user.update(updateData);
       res.status(200).json({ message: 'User updated', user: user });
     }
   }catch{
@@ -104,9 +112,11 @@ const deleteUser = async (req, res) => {
     const user = await User.findByPk(id);
     if(!user){
       res.status(404).json({ error: 'User not found' });
+    }else if(user.deletedAt){
+      res.status(404).json({ error: 'User not found' });
     }else{
-      await user.destroy();
-      res.status(200).json({ message: 'User deleted' });
+      await user.update({ deletedAt: new Date() });
+      res.status(200).json({ message: 'User deleted', user: user });
     }
   }catch{
     res.status(400).json({ error: 'Error when deleting user' });

@@ -21,6 +21,10 @@ const User = db.define('users', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true
     }
 },
 {
