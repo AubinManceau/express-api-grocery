@@ -1,9 +1,9 @@
-import ToSale from '../models/ToSale.js';
+import ToSales from '../models/ToSales.js';
 import Products from '../models/Products.js';
 
 const getProducts = async (req, res) => {
     try{
-        const toSales = await ToSale.findAll({ where: { deletedAt: null } });
+        const toSales = await ToSales.findAll({ where: { deletedAt: null } });
         res.status(200).json({ toSales: toSales });
     }catch(error){
         res.status(400).json({ error: 'Error when recovering toSales' });

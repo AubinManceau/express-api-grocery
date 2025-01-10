@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
+import User from '../models/Users.js';
 import bcrypt from 'bcrypt';
-import ClientUser from '../models/ClientUser.js';
-import AdminUser from '../models/AdminUser.js';
-import CommercialUser from '../models/CommercialUser.js';
-import SupplierUser from '../models/SupplierUser.js';
-import DeliveryManUser from '../models/DeliveryManUser.js';
-import LogisticManagerUser from '../models/LogiscticManagerUser.js';
+import ClientUser from '../models/ClientUsers.js';
+import AdminUser from '../models/AdminUsers.js';
+import CommercialUser from '../models/CommercialUsers.js';
+import SupplierUser from '../models/SupplierUsers.js';
+import DeliveryManUser from '../models/DeliveryManUsers.js';
+import LogisticManagerUser from '../models/LogiscticManagerUsers.js';
 
 const signup = async (req, res) => {
   const { email, password, first_name, last_name, role } = req.body;

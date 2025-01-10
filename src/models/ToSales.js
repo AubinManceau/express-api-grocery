@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/database.js';
-import Products from './Products.js';
 
 const ToSale = db.define('toSale', {
     toSale_id: {
@@ -39,7 +38,5 @@ const ToSale = db.define('toSale', {
     freezeTableName: true
 }
 );
-
-ToSale.belongsTo(Products, { foreignKey: 'user_id_supplier' });
 
 export default ToSale;

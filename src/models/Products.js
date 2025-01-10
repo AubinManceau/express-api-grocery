@@ -1,10 +1,16 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/database.js';
+import SupplierUser from './SupplierUsers.js';
+import ToSale from './toSales.js';
 
-const Products = db.define('toSale', {
+const Product = db.define('products', {
     toSale_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        references: {
+            model: ToSale,
+            key: 'toSale_id'
+        }
     },
     category: {
         type: DataTypes.STRING
@@ -22,7 +28,11 @@ const Products = db.define('toSale', {
         type: DataTypes.INTEGER
     },
     user_id_supplier: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        references: {
+            model: SupplierUser,
+            key: 'user_id'
+        }
     }
 },
 {
@@ -32,4 +42,7 @@ const Products = db.define('toSale', {
 }
 );
 
-export default Products;
+Product.belongsTo(SupplierUser, { foreignKey: 'user_id_supplier' });
+ToSale.hasOne(Product, { foreignKey: 'toSale_id' });
+
+export default Product;

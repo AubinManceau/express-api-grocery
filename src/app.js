@@ -4,7 +4,7 @@ import userRoutes from './routes/users.js';
 import productRoutes from './routes/products.js';
 import serviceRoutes from './routes/services.js';
 import orderRoutes from './routes/orders.js';
-import deliveryRoutes from './routes/delivery.js';
+import deliveryRoutes from './routes/deliveries.js';
 import messageRoutes from './routes/messages.js';
 import assignmentRequestRoutes from './routes/assignmentRequests.js';
 
