@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/database.js';
 import SupplierUser from './SupplierUsers.js';
-import ToSale from './toSales.js';
+import ToSale from './ToSales.js';
 
 const Product = db.define('products', {
     toSale_id: {
