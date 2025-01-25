@@ -7,6 +7,8 @@ import orderRoutes from './routes/orders.js';
 import deliveryRoutes from './routes/deliveries.js';
 import messageRoutes from './routes/messages.js';
 import assignmentRequestRoutes from './routes/assignmentRequests.js';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 db.authenticate()
   .then(() => console.info("Base de données synchronisée avec Sequelize"))

@@ -25,7 +25,7 @@ const ToSale = db.define('toSale', {
     margin: {
         type: DataTypes.FLOAT
     },
-    sellingPrice: {
+    selling_price: {
         type: DataTypes.FLOAT
     },
     deletedAt: {
