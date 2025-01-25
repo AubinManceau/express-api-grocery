@@ -7,8 +7,6 @@ import orderRoutes from './routes/orders.js';
 import deliveryRoutes from './routes/deliveries.js';
 import messageRoutes from './routes/messages.js';
 import assignmentRequestRoutes from './routes/assignmentRequests.js';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
 
 db.authenticate()
   .then(() => console.info("Base de données synchronisée avec Sequelize"))
@@ -39,5 +37,9 @@ app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/delivery-tours", deliveryRoutes);
 app.use("/api/v1/messages", messageRoutes);
 app.use("/api/v1/assignment-requests", assignmentRequestRoutes);
+
+app.get("/", (req, res) => {
+  res.sendFile("./src/index.html", { root: "." });
+});
 
 export default app;

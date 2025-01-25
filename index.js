@@ -1,5 +1,6 @@
 import http from "http";
 import app from './src/app.js';
+import { Server } from 'socket.io';
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -36,6 +37,26 @@ const errorHandler = error => {
 };
 
 const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('Utilisateur connecté :', socket.id);
+
+  socket.on('sendMessage', (message) => {
+    console.log('Message reçu :', message);
+    io.emit('receiveMessage', message); // Envoie à tous les clients
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Utilisateur déconnecté :', socket.id);
+  });
+});
 
 server.on('error', errorHandler);
 server.on('listening', () => {
