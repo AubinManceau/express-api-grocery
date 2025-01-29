@@ -39,7 +39,7 @@ app.use("/api/v1/messages", messageRoutes);
 app.use("/api/v1/assignment-requests", assignmentRequestRoutes);
 
 app.get("/", (req, res) => {
-  res.sendFile("./src/index.html", { root: "." });
+  res.sendFile("./public/index.html", { root: "." });
 });
 
 export default app;

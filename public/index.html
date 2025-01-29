@@ -6,8 +6,8 @@
   <title>Chat App</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f3f3f3;
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f2f5;
       margin: 0;
       padding: 0;
       display: flex;
@@ -17,8 +17,8 @@
     }
 
     .chat-container {
-      width: 400px;
-      background-color: white;
+      width: 350px;
+      background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       display: flex;
@@ -36,35 +36,35 @@
 
     .message {
       display: flex;
-      flex-direction: column;
+      align-items: flex-start;
       margin-bottom: 15px;
+      width: fit-content;
+      align-items: center;
     }
 
     .message .username {
       font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .message .timestamp {
+      color: #333;
       font-size: 0.9em;
-      color: #777;
-      margin-bottom: 5px;
+      margin-right: 10px;
     }
 
     .message .text {
-      padding: 10px;
-      border-radius: 15px;
+      padding: 12px;
+      border-radius: 18px;
+      max-width: 250px;
       word-wrap: break-word;
+      font-size: 1em;
     }
 
     .message .sent .text {
-      background-color: #DCF8C6;
-      align-self: flex-start;
+      background-color: #e2ffe2;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .message .received .text {
-      background-color: #F1F0F0;
-      align-self: flex-end;
+      background-color: #f0f2f5;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .input-container {
@@ -78,79 +78,61 @@
       flex: 1;
       padding: 10px;
       border: 1px solid #ddd;
-      border-radius: 15px;
+      border-radius: 20px;
       font-size: 14px;
     }
 
     .input-container button {
       padding: 10px 15px;
       border: none;
-      background-color: #007bff;
+      background-color: #0095f6;
       color: white;
-      border-radius: 15px;
+      border-radius: 20px;
       cursor: pointer;
     }
 
     .input-container button:hover {
-      background-color: #0056b3;
+      background-color: #007bb5;
     }
-
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <div class="messages" id="messages">
-      <!-- Messages will appear here -->
-    </div>
-
+    <div class="messages" id="messages"></div>
     <div class="input-container">
       <input type="text" id="messageInput" placeholder="Write a message..." />
       <button onclick="sendMessage()">Send</button>
     </div>
   </div>
-
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
 
-    // Simulate a username for the current user
     const username = "User" + Math.floor(Math.random() * 1000);
-    const userColor = getRandomColor();
 
-    // Recevoir un message et l'afficher dans le chat
     socket.on('receiveMessage', (messageData) => {
-      const { username: senderUsername, message, timestamp, userColor } = messageData;
+      const { username: senderUsername, message } = messageData;
 
       const messageElement = document.createElement('div');
       messageElement.classList.add('message', 'received');
 
-      // Username
-      const usernameElement = document.createElement('div');
-      usernameElement.classList.add('username');
-      usernameElement.textContent = senderUsername;
-
-      // Timestamp
-      const timestampElement = document.createElement('div');
-      timestampElement.classList.add('timestamp');
-      timestampElement.textContent = new Date(timestamp).toLocaleTimeString();
-
-      // Message text
       const messageTextElement = document.createElement('div');
       messageTextElement.classList.add('text');
       messageTextElement.textContent = message;
 
+      const usernameElement = document.createElement('div');
+      usernameElement.classList.add('username');
+      usernameElement.textContent = senderUsername;
+
       messageElement.appendChild(usernameElement);
-      messageElement.appendChild(timestampElement);
       messageElement.appendChild(messageTextElement);
 
-      // Don't display the message if it's sent by the current user
       if (senderUsername !== username) {
         document.getElementById('messages').appendChild(messageElement);
       }
       scrollToBottom();
     });
 
-    // Envoyer un message
     function sendMessage() {
       const messageInput = document.getElementById('messageInput');
       const message = messageInput.value;
@@ -158,50 +140,32 @@
       if (message.trim() !== '') {
         const timestamp = new Date().toISOString();
 
-        // Add message to the chat (sent message)
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', 'sent');
-
-        const usernameElement = document.createElement('div');
-        usernameElement.classList.add('username');
-        usernameElement.textContent = username;
-
-        const timestampElement = document.createElement('div');
-        timestampElement.classList.add('timestamp');
-        timestampElement.textContent = new Date(timestamp).toLocaleTimeString();
 
         const messageTextElement = document.createElement('div');
         messageTextElement.classList.add('text');
         messageTextElement.textContent = message;
 
+        const usernameElement = document.createElement('div');
+        usernameElement.classList.add('username');
+        usernameElement.textContent = username;
+
         messageElement.appendChild(usernameElement);
-        messageElement.appendChild(timestampElement);
         messageElement.appendChild(messageTextElement);
 
         document.getElementById('messages').appendChild(messageElement);
         scrollToBottom();
 
-        // Emit message to the server
-        socket.emit('sendMessage', { username, message, timestamp, userColor });
+        socket.emit('sendMessage', { username, message, timestamp });
 
-        messageInput.value = ''; // Clear input field
+        messageInput.value = '';
       }
     }
 
-    // Scroll to the bottom of the messages
     function scrollToBottom() {
       const messagesContainer = document.getElementById('messages');
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    // Helper function to generate random color
-    function getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
     }
   </script>
 </body>
