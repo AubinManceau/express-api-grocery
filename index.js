@@ -1,6 +1,8 @@
 import http from "http";
 import app from './src/app.js';
 import { Server } from 'socket.io';
+import swaggerjsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -36,6 +38,25 @@ const errorHandler = error => {
   }
 };
 
+const swaggerOptions = {
+  swaggerDefinition: {
+      openapi: '3.1.0',
+      info: {
+          title: 'Grocery Store API',
+          description: 'Grocery Store API Information',
+      },
+      servers: [
+          {
+              url: "http://localhost:3000"
+          }
+      ],
+  },
+  apis: ['./src/routes/*.js']
+}
+
+const swaggerDocs = swaggerjsdoc(swaggerOptions)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -50,7 +71,7 @@ io.on('connection', (socket) => {
 
   socket.on('sendMessage', (message) => {
     console.log('Message reçu :', message);
-    io.emit('receiveMessage', message); // Envoie à tous les clients
+    io.emit('receiveMessage', message);
   });
 
   socket.on('disconnect', () => {
