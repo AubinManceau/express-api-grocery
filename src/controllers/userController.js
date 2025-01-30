@@ -163,6 +163,41 @@ const getUserById = async (req, res) => {
   }
 }
 
+const getUsersByRole = async (req, res) => {
+  const role = req.params.role;
+  try{
+    if(role == "client"){
+      const clients = await ClientUser.findAll();
+      const clientUsers = await User.findAll({ where: { user_id: clients.map(client => client.user_id), deletedAt: null } });
+      res.status(200).json({ clients: clientUsers });
+    } else if(role == "admin"){
+      const admins = await AdminUser.findAll();
+      const adminUsers = await User.findAll({ where: { user_id: admins.map(admin => admin.user_id), deletedAt: null } });
+      res.status(200).json({ admins: adminUsers });
+    } else if(role == "commercial"){
+      const commercials = await CommercialUser.findAll();
+      const commercialUsers = await User.findAll({ where: { user_id: commercials.map(commercial => commercial.user_id), deletedAt: null } });
+      res.status(200).json({ commercials: commercialUsers });
+    } else if(role == "supplier"){
+      const suppliers = await SupplierUser.findAll();
+      const supplierUsers = await User.findAll({ where: { user_id: suppliers.map(supplier => supplier.user_id), deletedAt: null } });
+      res.status(200).json({ suppliers: supplierUsers });
+    } else if (role == "deliveryMan"){
+      const deliveryMen = await DeliveryManUser.findAll();
+      const deliveryManUsers = await User.findAll({ where: { user_id: deliveryMen.map(deliveryMan => deliveryMan.user_id), deletedAt: null } });
+      res.status(200).json({ deliveryMen: deliveryManUsers });
+    } else if (role == "logisticManager"){
+      const logisticManagers = await LogisticManagerUser.findAll();
+      const logisticManagerUsers = await User.findAll({ where: { user_id: logisticManagers.map(logisticManager => logisticManager.user_id), deletedAt: null } });
+      res.status(200).json({ logisticManagers: logisticManagerUsers });
+    } else {
+      res.status(400).json({ error: 'Role not found' });
+    }
+  }catch(error){
+    res.status(400).json({ error: error.message });
+  }
+}
+
 const updateUser = async (req, res) => {
   const id = req.params.id;
   try{
@@ -220,4 +255,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export default { signup, login, getUsers, getUserById, updateUser, deleteUser };
+export default { signup, login, getUsers, getUserById, getUsersByRole, updateUser, deleteUser };

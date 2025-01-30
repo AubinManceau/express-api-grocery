@@ -274,6 +274,73 @@ router.get("/", auth, userCtrl.getUsers);
 router.get("/:id", auth, userCtrl.getUserById);
 /**
  * @swagger
+ * /api/v1/users/{role}:
+ *   get:
+ *     summary: Récupération des utilisateurs par rôle.
+ *     description: Récupère une liste d'utilisateurs selon leur rôle (client, admin, commercial, supplier, deliveryMan, logisticManager).
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: role
+ *         required: true
+ *         description: Le rôle des utilisateurs à récupérer
+ *         schema:
+ *           type: string
+ *           enum: [client, admin, commercial, supplier, deliveryMan, logisticManager]
+ *           example: client
+ *     responses:
+ *       '200':
+ *         description: Liste des utilisateurs correspondant au rôle spécifié
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 clients:
+ *                   type: array
+ *                   description: Liste des utilisateurs pour le rôle 'client'
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       user_id:
+ *                         type: integer
+ *                         description: ID de l'utilisateur
+ *                         example: 20
+ *                       first_name:
+ *                         type: string
+ *                         description: Prénom de l'utilisateur
+ *                         example: "Paul"
+ *                       last_name:
+ *                         type: string
+ *                         description: Nom de l'utilisateur
+ *                         example: "Girard"
+ *                       email:
+ *                         type: string
+ *                         description: Email de l'utilisateur
+ *                         example: "paul.girard@exemple.fr"
+ *                       password:
+ *                         type: string
+ *                         description: Mot de passe hashé de l'utilisateur
+ *                         example: "MotDePasse123"
+ *                       deletedAt:
+ *                         type: string
+ *                         description: Date de suppression de l'utilisateur
+ *                         example: null
+ *       '400':
+ *         description: Rôle non trouvé ou erreur lors de la récupération
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Role not found"
+ */
+router.get("/role/:role", auth, userCtrl.getUsersByRole);
+/**
+ * @swagger
  * /api/v1/users/{id}:
  *   put:
  *     summary: Mise à jour d'un utilisateur.
