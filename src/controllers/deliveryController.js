@@ -1,23 +1,18 @@
+/* eslint-disable no-unused-vars */
+const getDeliveries = async (req, res) => {};
 
+const getDeliveryById = async (req, res) => {};
 
-const getDeliveries = async (req, res) => {
-    
-}
+const createDelivery = async (req, res) => {};
 
-const getDeliveryById = async (req, res) => {
+const updateDelivery = async (req, res) => {};
 
-}
+const deleteDelivery = async (req, res) => {};
 
-const createDelivery = async (req, res) => {
-
-}
-
-const updateDelivery = async (req, res) => {
-
-}
-
-const deleteDelivery= async (req, res) => {
-
-}
-
-export default { getDeliveries, getDeliveryById, createDelivery, updateDelivery, deleteDelivery };
+export default {
+  getDeliveries,
+  getDeliveryById,
+  createDelivery,
+  updateDelivery,
+  deleteDelivery,
+};

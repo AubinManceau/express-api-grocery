@@ -1,6 +1,6 @@
-import express from 'express';
+import express from "express";
 import commentCtrl from "../controllers/commentController.js";
-import auth from "../middlewares/authentification.js"
+import auth from "../middlewares/authentification.js";
 
 const router = express.Router();
 

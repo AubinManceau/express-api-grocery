@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +15,7 @@
     "@sequelize/mssql": "^7.0.0-alpha.43",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
+    "eslint": "^8.57.1",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "sequelize": "^6.37.5",

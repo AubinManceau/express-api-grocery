@@ -1,42 +1,44 @@
-import { DataTypes } from 'sequelize';
-import db from '../config/database.js';
+import { DataTypes } from "sequelize";
+import db from "../config/database.js";
 
-const ToSale = db.define('toSale', {
+const ToSale = db.define(
+  "toSale",
+  {
     toSale_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     name: {
-        type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     description: {
-        type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     image: {
-        type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
     HT_price: {
-        type: DataTypes.FLOAT
+      type: DataTypes.FLOAT,
     },
     TTC_price: {
-        type: DataTypes.FLOAT
+      type: DataTypes.FLOAT,
     },
     margin: {
-        type: DataTypes.FLOAT
+      type: DataTypes.FLOAT,
     },
     selling_price: {
-        type: DataTypes.FLOAT
+      type: DataTypes.FLOAT,
     },
     deletedAt: {
-        type: DataTypes.DATE
-    }
-},
-{
+      type: DataTypes.DATE,
+    },
+  },
+  {
     timestamps: false,
-    schema: 'scm_toSale',
-    freezeTableName: true
-}
+    schema: "scm_toSale",
+    freezeTableName: true,
+  },
 );
 
 export default ToSale;
