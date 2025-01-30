@@ -17,7 +17,7 @@
     }
 
     .chat-container {
-      width: 350px;
+      width: 450px;
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,11 +35,8 @@
     }
 
     .message {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       width: fit-content;
-      align-items: center;
     }
 
     .message .username {
@@ -50,19 +47,23 @@
     }
 
     .message .text {
-      padding: 12px;
+      padding: 5px 0 0 0;
       border-radius: 18px;
       max-width: 250px;
       word-wrap: break-word;
       font-size: 1em;
     }
 
-    .message .sent .text {
+    .message.sent {
+      padding: 5px;
+      width: 70%;
       background-color: #e2ffe2;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    .message .received .text {
+    .message.received {
+      padding: 5px;
+      width: 70%;
       background-color: #f0f2f5;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
@@ -90,82 +91,108 @@
       border-radius: 20px;
       cursor: pointer;
     }
-
-    .input-container button:hover {
-      background-color: #007bb5;
-    }
   </style>
 </head>
 <body>
   <div class="chat-container">
     <div class="messages" id="messages"></div>
     <div class="input-container">
-      <input type="text" id="messageInput" placeholder="Write a message..." />
-      <button onclick="sendMessage()">Send</button>
+      <input type="text" id="messageInput" placeholder="Ecrivez un message..." />
+      <button onclick="sendMessage()">Envoyer</button>
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
-
-    const username = "User" + Math.floor(Math.random() * 1000);
+    const username = "User" + Math.floor(Math.random() * 10);
 
     socket.on('receiveMessage', (messageData) => {
       const { username: senderUsername, message } = messageData;
 
+      if (senderUsername !== username) {
+        displayMessage(senderUsername, message, 'received');
+      }
+    });
+
+    function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value.trim();
+
+      if (message === '') return;
+
+      if (message.startsWith('/dab')) {
+        handleDABCommand(message);
+      } else {
+        displayMessage(username, message, 'sent');
+        socket.emit('sendMessage', { username, message });
+      }
+
+      messageInput.value = '';
+    }
+
+    function displayMessage(username, message, type) {
+      const messageElement = createMessageElement(username, message, type);
+      document.getElementById('messages').appendChild(messageElement);
+      scrollToBottom();
+    }
+
+    function createMessageElement(username, message, type) {
       const messageElement = document.createElement('div');
-      messageElement.classList.add('message', 'received');
+      messageElement.classList.add('message', type);
+
+      const usernameElement = document.createElement('div');
+      usernameElement.classList.add('username');
+      usernameElement.textContent = username;
 
       const messageTextElement = document.createElement('div');
       messageTextElement.classList.add('text');
       messageTextElement.textContent = message;
 
-      const usernameElement = document.createElement('div');
-      usernameElement.classList.add('username');
-      usernameElement.textContent = senderUsername;
-
       messageElement.appendChild(usernameElement);
       messageElement.appendChild(messageTextElement);
 
-      if (senderUsername !== username) {
-        document.getElementById('messages').appendChild(messageElement);
-      }
-      scrollToBottom();
-    });
-
-    function sendMessage() {
-      const messageInput = document.getElementById('messageInput');
-      const message = messageInput.value;
-
-      if (message.trim() !== '') {
-        const timestamp = new Date().toISOString();
-
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message', 'sent');
-
-        const messageTextElement = document.createElement('div');
-        messageTextElement.classList.add('text');
-        messageTextElement.textContent = message;
-
-        const usernameElement = document.createElement('div');
-        usernameElement.classList.add('username');
-        usernameElement.textContent = username;
-
-        messageElement.appendChild(usernameElement);
-        messageElement.appendChild(messageTextElement);
-
-        document.getElementById('messages').appendChild(messageElement);
-        scrollToBottom();
-
-        socket.emit('sendMessage', { username, message, timestamp });
-
-        messageInput.value = '';
-      }
+      return messageElement;
     }
 
     function scrollToBottom() {
       const messagesContainer = document.getElementById('messages');
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function handleDABCommand(message) {
+      const args = message.split(' ');
+      const montant = parseFloat(args[1]);
+      const coupure = args[2];
+
+      if (isNaN(montant) || !coupure) {
+        displayMessage('Système', "Commande invalide. Usage: /dab montant euro|dollar", 'sent');
+        return;
+      }
+
+      const result = dab(montant, coupure);
+      displayMessage('Système', result, 'sent');
+    }
+
+    function dab(montant, coupure) {
+      const billetsEuro = [500, 200, 100, 50, 20, 10, 5, 2, 1, 0.50, 0.20, 0.10, 0.05, 0.02, 0.01];
+      const billetsDollar = [100, 50, 20, 10, 5, 2, 1, 0.50, 0.25, 0.10, 0.05, 0.01];
+
+      const finalCoupure = coupure === 'euro' ? billetsEuro : coupure === 'dollar' ? billetsDollar : null;
+
+      if (!finalCoupure) return "La coupure doit être 'euro' ou 'dollar'";
+
+      const devise = coupure === 'euro' ? '€' : '$';
+      const result = [];
+
+      for (const billet of finalCoupure) {
+        if (montant >= billet) {
+          const item = Math.floor(montant / billet);
+          montant = (montant - item * billet).toFixed(2);
+          result.push(`${item} ${billet >= 1 ? 'billet' : 'pièce'}(s) de ${billet} ${devise}`);
+        }
+      }
+
+      return result.length ? result.join(', ') : "Aucune coupure nécessaire.";
     }
   </script>
 </body>
