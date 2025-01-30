@@ -7,6 +7,7 @@ import orderRoutes from "./routes/orders.js";
 import deliveryRoutes from "./routes/deliveries.js";
 import messageRoutes from "./routes/messages.js";
 import assignmentRequestRoutes from "./routes/assignmentRequests.js";
+import authRoutes from "./routes/auth.js";
 
 db.authenticate()
   .then(() => console.info("Base de données synchronisée avec Sequelize"))
@@ -30,6 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+app.use("/api/v1", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/services", serviceRoutes);
