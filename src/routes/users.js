@@ -48,7 +48,7 @@ const router = express.Router();
  *                         type: string
  *                         description: Rôle associé à l'utilisateur
  *                         example: "client"
- *       '400':
+ *       '500':
  *         description: Erreur lors de la récupération des utilisateurs
  *         content:
  *           application/json:
@@ -120,7 +120,7 @@ router.get("/", auth, userCtrl.getUsers);
  *                 error:
  *                   type: string
  *                   example: "User not found"
- *       '400':
+ *       '500':
  *         description: Erreur lors de la récupération de l'utilisateur
  *         content:
  *           application/json:
@@ -187,8 +187,18 @@ router.get("/:id", auth, userCtrl.getUserById);
  *                         type: string
  *                         description: Date de suppression de l'utilisateur
  *                         example: null
- *       '400':
+ *       '500':
  *         description: Rôle non trouvé ou erreur lors de la récupération
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Role not found"
+ *       '404':
+ *         description: Rôle non trouvé
  *         content:
  *           application/json:
  *             schema:
@@ -285,7 +295,7 @@ router.get("/role/:role", auth, userCtrl.getUsersByRole);
  *                 error:
  *                   type: string
  *                   example: "User not found"
- *       '400':
+ *       '500':
  *         description: Erreur lors de la mise à jour de l'utilisateur
  *         content:
  *           application/json:
@@ -358,7 +368,7 @@ router.put("/:id", auth, userCtrl.updateUser);
  *                 error:
  *                   type: string
  *                   example: "User not found"
- *       '400':
+ *       '500':
  *         description: Erreur lors de la suppression de l'utilisateur
  *         content:
  *           application/json:

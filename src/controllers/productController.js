@@ -14,7 +14,7 @@ const getProducts = async (req, res) => {
     );
     res.status(200).json({ products: detailledProduct });
   } catch (error) {
-    res.status(400).json({ error: "Error when recovering products" });
+    res.status(500).json({ error: "Error when recovering products" });
   }
 };
 
@@ -31,7 +31,7 @@ const getProductById = async (req, res) => {
       res.status(200).json({ product, toSale });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error when recovering product" });
+    res.status(500).json({ error: "Error when recovering product" });
   }
 };
 
@@ -72,7 +72,7 @@ const createProduct = async (req, res) => {
     });
     res.status(201).json({ product, toSale });
   } catch (error) {
-    res.status(400).json({ error: "Error when creating product" });
+    res.status(500).json({ error: "Error when creating product" });
   }
 };
 
@@ -121,7 +121,7 @@ const updateProduct = async (req, res) => {
       res.status(200).json({ product, toSale });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error when updating product" });
+    res.status(500).json({ error: "Error when updating product" });
   }
 };
 
@@ -135,10 +135,10 @@ const deleteProduct = async (req, res) => {
       res.status(404).json({ error: "Product not found" });
     } else {
       await toSale.update({ deletedAt: new Date() });
-      res.status(204).json({ message: "Product deleted" });
+      res.status(200).json({ message: "Product deleted" });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error when deleting product" });
+    res.status(500).json({ error: "Error when deleting product" });
   }
 };
 

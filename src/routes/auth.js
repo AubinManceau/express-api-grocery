@@ -5,10 +5,10 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/users/login:
+ * /api/v1/login:
  *   post:
  *     summary: Connexion à un compte utilisateur.
- *     description: Authentification d'un utilisateur en utilisant son email et son mot de passe.
+ *     description: Authentification d'un utilisateur en utilisant son email et son mot de passe. Un token JWT est généré pour les futures requêtes.
  *     tags:
  *       - Authentification
  *     requestBody:
@@ -47,7 +47,7 @@ const router = express.Router();
  *                   description: Token JWT
  *                   example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       '400':
- *         description: Les champs email et mot de passe sont requis.
+ *         description: Les champs email et mot de passe sont requis, ou les informations de connexion sont incorrectes (email, mot de passe incorrect, ou compte supprimé).
  *         content:
  *           application/json:
  *             schema:
@@ -66,11 +66,21 @@ const router = express.Router();
  *                 message:
  *                   type: string
  *                   example: "Incorrect login/password pair"
+ *       '500':
+ *         description: Erreur interne du serveur lors de la tentative de connexion.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
  */
 router.post("/login", authCtrl.login);
 /**
  * @swagger
- * /api/v1/users/signup:
+ * /api/v1/signup:
  *   post:
  *     summary: Création d'un compte utilisateur.
  *     description: Crée un nouveau compte utilisateur avec différents rôles possibles.
@@ -131,8 +141,8 @@ router.post("/login", authCtrl.login);
  *                 error:
  *                   type: string
  *                   example: "Email, password, role, firstname and lastname are required"
- *       '409':
- *         description: Email déjà existant
+ *       '500':
+ *         description: Erreur lors de la création de l'utilisateur
  *         content:
  *           application/json:
  *             schema:
@@ -140,7 +150,7 @@ router.post("/login", authCtrl.login);
  *               properties:
  *                 error:
  *                   type: string
- *                   example: "This email is already saved"
+ *                   example: "Error when creating user"
  */
 router.post("/signup", authCtrl.signup);
 

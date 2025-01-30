@@ -101,7 +101,7 @@ const router = express.Router();
  *                             nullable: true
  *                             description: Date de suppression logique de la vente
  *                             example: null
- *       '400':
+ *       '500':
  *         description: Erreur lors de la récupération des produits
  *         content:
  *           application/json:
@@ -222,7 +222,7 @@ router.get("/", auth, productCtrl.getProducts);
  *                 error:
  *                   type: string
  *                   example: "Product not found"
- *       '400':
+ *       '500':
  *         description: Erreur lors de la récupération du produit
  *         content:
  *           application/json:
@@ -388,7 +388,7 @@ router.get("/:id", auth, productCtrl.getProductById);
  *                       format: date-time
  *                       description: Date de suppression, si disponible
  *                       example: null
- *       '400':
+ *       '500':
  *         description: Erreur lors de la création du produit
  *         content:
  *           application/json:
@@ -562,7 +562,7 @@ router.post("/", auth, productCtrl.createProduct);
  *                       format: date-time
  *                       description: Date de suppression, si disponible
  *                       example: null
- *       '400':
+ *       '500':
  *         description: Erreur lors de la mise à jour du produit
  *         content:
  *           application/json:
@@ -601,7 +601,7 @@ router.put("/:id", auth, productCtrl.updateProduct);
  *           type: integer
  *           example: 1
  *     responses:
- *       '204':
+ *       '200':
  *         description: Produit supprimé avec succès
  *         content:
  *           application/json:
@@ -611,7 +611,7 @@ router.put("/:id", auth, productCtrl.updateProduct);
  *                 message:
  *                   type: string
  *                   example: "Product deleted"
- *       '400':
+ *       '500':
  *         description: Erreur lors de la suppression du produit
  *         content:
  *           application/json:

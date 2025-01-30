@@ -52,7 +52,7 @@ const getUsers = async (req, res) => {
     );
     res.status(200).json({ users: usersWithRole });
   } catch (error) {
-    res.status(400).json({ error: "Error when recovering users" });
+    res.status(500).json({ error: "Error when recovering users" });
   }
 };
 
@@ -102,7 +102,7 @@ const getUserById = async (req, res) => {
       res.status(200).json({ user: userWithRole });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error when recovering user" });
+    res.status(500).json({ error: "Error when recovering user" });
   }
 };
 
@@ -166,10 +166,10 @@ const getUsersByRole = async (req, res) => {
       });
       res.status(200).json({ logisticManagers: logisticManagerUsers });
     } else {
-      res.status(400).json({ error: "Role not found" });
+      res.status(404).json({ error: "Role not found" });
     }
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -221,7 +221,7 @@ const updateUser = async (req, res) => {
       res.status(200).json({ message: "User updated", user: userWithRole });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error when updating user" });
+    res.status(500).json({ error: "Error when updating user" });
   }
 };
 
@@ -238,7 +238,7 @@ const deleteUser = async (req, res) => {
       res.status(200).json({ message: "User deleted", user });
     }
   } catch (error) {
-    res.status(400).json({ error: "Error when deleting user" });
+    res.status(500).json({ error: "Error when deleting user" });
   }
 };
 
