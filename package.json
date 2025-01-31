@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha ./src/tests/*.test.js",
     "lint": "eslint .",
-    "lint-fix": "eslint . --fix"
+    "lint-fix": "eslint . --fix",
+    "start": "node ./index.js"
   },
   "author": "",
   "license": "ISC",

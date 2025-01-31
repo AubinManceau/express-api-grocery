@@ -1,0 +1,27 @@
+services:
+  api:
+    build: .
+    container_name: node_api
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=${DIALECT}
+      - DB_USER=${USER}
+      - DB_PASSWORD=${PASSWORD}
+      - DB_NAME=${DB}
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql_db
+    environment:
+      - SA_PASSWORD=your_password
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:
